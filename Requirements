@@ -1,5 +1,6 @@
 # Required Libraries for Program Execution
 #This document lists the necessary Python libraries and their versions needed to run the program.
+#Python version 3.11
 
 # 1. Virtual Environment Setup
 python -m venv .env             # Create a virtual environment named .env, so that system state remains same
