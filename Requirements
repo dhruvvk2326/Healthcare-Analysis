@@ -1,0 +1,36 @@
+# Required Libraries for Program Execution
+#This document lists the necessary Python libraries and their versions needed to run the program.
+#Python version 3.11
+
+# 1. Virtual Environment Setup
+python -m venv .env             # Create a virtual environment named .env, so that system state remains same
+source .env/bin/activate        # Activate the virtual environment
+
+
+#2. Update pip, setuptools, and wheel
+pip install -U pip setuptools wheel    # Update pip, setuptools, and wheel
+
+
+#3. Natural Language Processing Libraries
+pip install -U spacy                 # Install spaCy library
+python -m spacy download en_core_web_sm    # Download English language model
+
+#Optional: spaCy with GPU support (CUDA 11.3)
+pip install -U spacy[cuda113]        # Install spaCy with CUDA 11.3 support (for GPU)
+
+
+#4. PDF Parsing Library
+pip install -U pypdf2                # Install PyPDF2 library for PDF manipulation
+
+
+#5. Transformers Library (for BERT-based models)
+pip install -U transformers          # Install Hugging Face Transformers library
+
+
+#6. PyTorch (for deep learning with BERT-based models)
+pip install -U torch torchvision     # Install PyTorch library for deep learning
+
+'''
+This markdown document provides all the necessary pip installs along with small descriptions for each library or package. 
+It\'s organized and easy to understand, making it convenient for users to set up and run the program.
+'''
