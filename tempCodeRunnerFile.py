@@ -23,20 +23,16 @@ def clean_text(text):
     # Tokenize text
     tokens = word_tokenize(text)
 
-    # Lemmatize the tokens
-    lemmatizer = WordNetLemmatizer()
-    lemmatized_tokens = [lemmatizer.lemmatize(word) for word in tokens]
-
-    # Stem the lemmatized tokens
-    stemmer = PorterStemmer()
-    stemmed_tokens = [stemmer.stem(word) for word in lemmatized_tokens]
-
     # Remove stopwords and single-character tokens, but keep '%' sign
     stop_words = set(stopwords.words('english'))
-    filtered_tokens = [word for word in stemmed_tokens if word not in stop_words and (len(word) > 1 or word == '%')]
+    filtered_tokens = [word for word in tokens if word not in stop_words and (len(word) > 1 or word == '%')]
+
+    # Lemmatize the tokens
+    lemmatizer = WordNetLemmatizer()
+    lemmatized_tokens = [lemmatizer.lemmatize(word) for word in filtered_tokens]
 
     # Join tokens back into text
-    cleaned_text = ' '.join(filtered_tokens)
+    cleaned_text = ' '.join(lemmatized_tokens)
 
     return cleaned_text
 
