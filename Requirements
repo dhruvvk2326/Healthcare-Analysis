@@ -21,6 +21,7 @@ pip install -U spacy[cuda113]        # Install spaCy with CUDA 11.3 support (for
 
 #4. PDF Parsing Library
 pip install -U pypdf2                # Install PyPDF2 library for PDF manipulation
+pip install pdfminer.six             # Used for extracting text from PDF files
 
 
 #5. Transformers Library (for BERT-based models)
@@ -29,6 +30,10 @@ pip install -U transformers          # Install Hugging Face Transformers library
 
 #6. PyTorch (for deep learning with BERT-based models)
 pip install -U torch torchvision     # Install PyTorch library for deep learning
+
+#7. NLTK (Natural Language Toolkit): Used for natural language processing tasks such as tokenization, stemming, and lemmatization.
+pip install nltk
+
 
 '''
 This markdown document provides all the necessary pip installs along with small descriptions for each library or package. 
