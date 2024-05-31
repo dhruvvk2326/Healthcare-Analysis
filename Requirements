@@ -33,7 +33,7 @@ pip install -U torch torchvision     # Install PyTorch library for deep learning
 
 #7. NLTK (Natural Language Toolkit): Used for natural language processing tasks such as tokenization, stemming, and lemmatization.
 pip install nltk
-
+nltk.download('punkt')
 
 '''
 This markdown document provides all the necessary pip installs along with small descriptions for each library or package. 
