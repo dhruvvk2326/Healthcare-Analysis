@@ -1,0 +1,104 @@
+import re
+import nltk
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import PCA
+import spacy
+import PyPDF2
+import umap
+import matplotlib.pyplot as plt
+
+# Ensure nltk resources are downloaded
+nltk.download('punkt')
+nltk.download('stopwords')
+
+# Initialize spacy
+nlp = spacy.load("en_core_web_sm")
+stop_words = set(stopwords.words('english'))
+
+# Function to read PDF
+def read_pdf(file_path):
+    with open(file_path, 'rb') as file:
+        reader = PyPDF2.PdfReader(file)
+        text = ""
+        for page_num in range(len(reader.pages)):
+            page = reader.pages[page_num]
+            text += page.extract_text()
+    return text
+
+# Function to clean text (remove page numbers and other useless things)
+def clean_text(text):
+    # Remove page numbers and other common delimiters
+    text = re.sub(r'\n\d+\n', ' ', text)  # Remove isolated numbers (page numbers)
+    text = re.sub(r'\s+', ' ', text)  # Replace multiple spaces/newlines with a single space
+    return text
+
+# Function to preprocess text
+def preprocess_text(text):
+    text = text.lower()  # Lowercase text
+    tokens = word_tokenize(text)  # Tokenize text
+    tokens = [word for word in tokens if word.isalnum()]  # Remove non-alphanumeric tokens
+    tokens = [word for word in tokens if word not in stop_words]  # Remove stopwords
+    return " ".join(tokens)
+
+# Function to process a single PDF and apply dimensionality reduction
+def process_single_document(file_path):
+    text = read_pdf(file_path)
+    cleaned_text = clean_text(text)
+    sentences = sent_tokenize(cleaned_text)
+    preprocessed_sentences = [preprocess_text(sentence) for sentence in sentences]
+    
+    # Vectorize sentences using TF-IDF
+    vectorizer = TfidfVectorizer()
+    X = vectorizer.fit_transform(preprocessed_sentences)
+    
+    # Apply PCA for dimensionality reduction
+    pca = PCA(n_components=2)
+    X_pca = pca.fit_transform(X.toarray())
+    
+    # Optionally, you can use UMAP for dimensionality reduction
+    reducer = umap.UMAP(n_components=2)
+    X_umap = reducer.fit_transform(X.toarray())
+    
+    return X_pca, X_umap, sentences
+
+# Function to plot the results
+def plot_results(X, title):
+    plt.scatter(X[:, 0], X[:, 1])
+    plt.title(title)
+    plt.xlabel('Component 1')
+    plt.ylabel('Component 2')
+    plt.show()
+
+# Example usage for a single document
+file_path = "C:\\Users\\dell\\OneDrive\\Desktop\\NLP project\\Covid_research_paper.pdf"
+X_pca, X_umap, sentences = process_single_document(file_path)
+
+plot_results(X_pca, "PCA of Sentences in Research Article")
+plot_results(X_umap, "UMAP of Sentences in Research Article")
+
+
+'''
+UMAP, or Uniform Manifold Approximation and Projection, 
+is a technique used in machine learning to visualize high-dimensional data 
+in a lower-dimensional space, usually two dimensions. 
+It works by finding a simplified representation of the data while preserving 
+its underlying structure, making it easier to understand and analyze complex datasets.
+Think of it as a way to condense a lot of information into a simpler form that still
+captures the main patterns and relationships in the data.
+'''
+
+'''
+Principal Component Analysis (PCA) is a mathematical technique used to simplify 
+and compress data. It works by finding the directions, called principal components,
+ in which the data varies the most. These components are ordered by the amount of 
+ variation they capture, with the first component explaining the most variation, 
+ the second component explaining the second most, and so on. PCA then projects the
+ original data onto these principal components, reducing the dimensionality of the 
+ data while preserving as much of its variability as possible. 
+ This makes it easier to understand the essential structure of the data and 
+ identify patterns or trends within it.
+
+'''
+
